@@ -19,14 +19,25 @@ export function ContactForm() {
     setIsSubmitting(true)
 
     try {
-      await new Promise(resolve => setTimeout(resolve, 1000))
-      
-      toast({
-        title: "Заявка отправлена!",
-        description: "Я свяжусь с вами в ближайшее время.",
+      const response = await fetch('https://functions.poehali.dev/e37f18d5-cedd-43db-b427-cf691f7ddd06', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
       })
-      
-      setFormData({ name: "", contact: "", description: "" })
+
+      const data = await response.json()
+
+      if (response.ok && data.success) {
+        toast({
+          title: "Заявка отправлена!",
+          description: "Я свяжусь с вами в ближайшее время.",
+        })
+        setFormData({ name: "", contact: "", description: "" })
+      } else {
+        throw new Error(data.error || 'Failed to send')
+      }
     } catch (error) {
       toast({
         title: "Ошибка",

@@ -1,0 +1,30 @@
+{
+  "tests": [
+    {
+      "name": "Test successful form submission",
+      "method": "POST",
+      "body": {
+        "name": "Test User",
+        "contact": "@testuser",
+        "description": "I need a 3D model for my Roblox game"
+      },
+      "expectedStatus": 200,
+      "expectedBody": {
+        "success": true
+      },
+      "bodyMatcher": "partial"
+    },
+    {
+      "name": "Test missing fields validation",
+      "method": "POST",
+      "body": {
+        "name": "Test User"
+      },
+      "expectedStatus": 400,
+      "expectedBody": {
+        "error": "string"
+      },
+      "bodyMatcher": "partial"
+    }
+  ]
+}
