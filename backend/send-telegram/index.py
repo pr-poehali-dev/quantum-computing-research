@@ -51,6 +51,9 @@ def handler(event: dict, context) -> dict:
         bot_token = os.environ.get('TELEGRAM_BOT_TOKEN')
         chat_id = os.environ.get('TELEGRAM_CHAT_ID')
 
+        print(f"Bot token exists: {bool(bot_token)}")
+        print(f"Chat ID exists: {bool(chat_id)}")
+
         if not bot_token or not chat_id:
             return {
                 'statusCode': 500,
@@ -77,9 +80,11 @@ def handler(event: dict, context) -> dict:
             'parse_mode': 'HTML'
         }).encode('utf-8')
 
+        print(f"Sending to Telegram: {telegram_url[:50]}...")
         req = urllib.request.Request(telegram_url, data=data, method='POST')
         with urllib.request.urlopen(req) as response:
             result = json.loads(response.read().decode('utf-8'))
+            print(f"Telegram response: {result}")
 
         if result.get('ok'):
             return {
